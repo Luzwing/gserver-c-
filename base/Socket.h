@@ -31,6 +31,22 @@ class Socket : public std::enable_shared_from_this<Socket>, public Noncopyable
 		bool close();
 		bool reconnect(uint64_t timeout_ms = -1);
 
+		bool setOption(int level, int option, const void* optval, socklen_t optlen);
+		bool getOption(int level, int option, void* optval, socklen_t* optlen);
+		
+		template <typename T>
+		bool setOption(int level, int option, const T& optval)
+		{
+			return  setOption(level, option, &optval, sizeof(T));
+		}
+
+		template <typename T>
+		bool getOption(int level, int option, T& optval)
+		{
+			size_t vallen = sizeof(optval);
+			return getOption(level, option, &optval, &vallen);
+		}
+
 	public:
 		virtual int recv(char* buf, size_t length, int flags = 0);
 		virtual int recv(struct iovec* vec, size_t length, int flags = 0);

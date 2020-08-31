@@ -339,5 +339,27 @@ Address::Ptr Socket::getLocalAddress()
 	return result;
 }
 
+bool Socket::setOption(int level, int option, const void* optval, socklen_t optlen)
+{
+	int ret = ::setsockopt(sock_, level, option, optval, optlen);
+	if (0 != ret)
+	{
+		CPAN_LOG_ERROR(g_logger) << "SetOption Error " << sock_ << " " << level << " " << errno << " " << strerror(errno); 
+		return false;
+	}
+	return true;
+}
+
+bool Socket::getOption(int level, int option, void* optval, socklen_t* optlen)
+{
+	int ret = ::getsockopt(sock_, level, option, optval, optlen);
+	if (0 != ret)
+	{
+		CPAN_LOG_ERROR(g_logger) << "GetOption Error " << sock_ << " " << level << " " << errno << " " << strerror(errno);
+		return false;
+	}
+	return true;
+}
+
 }
 

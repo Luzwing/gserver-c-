@@ -53,7 +53,7 @@ class FdCtl : public std::enable_shared_from_this<FdCtl>
 class FdManager : public Singleton<FdManager>
 {
 	public:
-		FdCtx::ptr get(int fd, bool auto_create = false);
+		FdCtl::Ptr get(int fd, bool auto_create = false);
 
 		void del(int fd);
 
