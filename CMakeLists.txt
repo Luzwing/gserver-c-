@@ -14,11 +14,14 @@ set (LIB_SRC
 		base/Thread.cc
 		base/ThreadPool.cc
 		base/util.cc
+		reactor/EventLoop.cc
+		reactor/Poller.cc
+		reactor/Channel.cc
 	)
 
 add_library (cpan SHARED ${LIB_SRC})
 
-#find_library (PTHREAD pthread)
+find_library (PTHREAD pthread)
 
 set (LIBS
 		cpan
@@ -33,5 +36,8 @@ add_definitions(-std=c++11)
 add_definitions(-g)
 
 add_executable (endian "test/test_endian.cc" )
+add_executable (eventloop1 "test/test_eventloop1.cc")
 
-target_link_libraries (endian pthread)
+#target_link_libraries (endian pthread)
+#target_link_libraries (eventloop1 pthread)
+target_link_libraries (eventloop1 ${LIBS})
