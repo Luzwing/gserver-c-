@@ -25,7 +25,11 @@ class Thread : Noncopyable
 
 		std::string getName();
 
+		pid_t getThreadID();
+
 		static std::string getCurName();
+
+		static pid_t getCurThreadID();
 
 	private:
 		void setDefaultName();

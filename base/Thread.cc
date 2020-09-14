@@ -79,4 +79,16 @@ namespace cpan
 		return "UNKNOWN";
 	}
 
+	pid_t Thread::getCurThreadID()
+	{
+		if (thread_t)
+			return thread_t->getThreadID();
+		return 0;
+	}
+
+	pid_t Thread::getThreadID()
+	{
+		return this->tid_;
+	}
+
 }
