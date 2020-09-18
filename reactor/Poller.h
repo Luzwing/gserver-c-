@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <map>
-#include "EventLoop.h"
+#include <memory>
 
 struct pollfd;
 
@@ -11,10 +11,12 @@ namespace cpan
 {
 
 class Channel;
+class EventLoop;
 
 class Poller
 {
 	public:
+		typedef std::shared_ptr<Poller> Ptr;
 		typedef std::vector<Channel*> ChannelList;
 
 		Poller(EventLoop* loop);

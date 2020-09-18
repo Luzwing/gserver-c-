@@ -17,6 +17,7 @@ set (LIB_SRC
 		reactor/EventLoop.cc
 		reactor/Poller.cc
 		reactor/Channel.cc
+		reactor/Acceptor.cc
 	)
 
 add_library (cpan SHARED ${LIB_SRC})
@@ -37,7 +38,11 @@ add_definitions(-g)
 
 add_executable (endian "test/test_endian.cc" )
 add_executable (eventloop1 "test/test_eventloop1.cc")
+add_executable (eventloop2 "test/test_eventloop2.cc")
+add_executable (test_acceptor "test/test_acceptor.cc")
 
 #target_link_libraries (endian pthread)
 #target_link_libraries (eventloop1 pthread)
 target_link_libraries (eventloop1 ${LIBS})
+target_link_libraries (eventloop2 ${LIBS})
+target_link_libraries (test_acceptor ${LIBS})

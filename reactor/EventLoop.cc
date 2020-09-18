@@ -1,8 +1,10 @@
 #include <poll.h>
 #include <unistd.h>
 #include "EventLoop.h"
+#include "Channel.h"
 
 static cpan::Logger::Ptr g_logger = cpan::LoggerManager::getInstance()->getLogger("root");
+static const int TimeOutMs = 10000;
 
 __thread cpan::EventLoop* t_loopInThisThread = 0;
 
@@ -13,6 +15,7 @@ namespace cpan
 		: looping_(false),
 		threadId_(Thread::getCurThreadID())
 	{
+		poller_.reset(new Poller(this));
 		if (t_loopInThisThread)
 		{
 			CPAN_LOG_FATAL(g_logger) << "Another EventLoop " << t_loopInThisThread << " exists in this thread " << threadId_;
@@ -32,10 +35,19 @@ namespace cpan
 	void EventLoop::loop()
 	{
 		Assert(!looping_);
+		assertInLoopThread();
 		looping_ = true;
+		quit_ = false;
 
-		::poll(NULL, 0, 5 * 1000);
-
+		while(!quit_)
+		{
+			activeChannels_.clear();
+			poller_->poll(TimeOutMs, &activeChannels_);
+			for (Channel* c : activeChannels_)
+			{
+				c->handleEvent();
+			}
+		}
 		looping_ = false;
 	}
 
@@ -45,21 +57,12 @@ namespace cpan
 		_exit(1);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	void EventLoop::updateChannel(Channel* channel)
+	{
+		Assert(channel->ownerLoop() == this);
+		assertInLoopThread();
+		poller_->updateChannel(channel);
+	}
 
 
 

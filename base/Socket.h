@@ -61,6 +61,7 @@ class Socket : public std::enable_shared_from_this<Socket>, public Noncopyable
 	public:
 		Socket::Ptr getSharedPtr() { return shared_from_this(); }
 
+		int fd() { return sock_; }
 		int family() { return family_; }
 		int type() { return type_; }
 		int protocol() { return protocol_; }

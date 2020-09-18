@@ -1,6 +1,7 @@
 #include <poll.h>
 #include "Channel.h"
 #include "../base/logger.h"
+#include "EventLoop.h"
 
 static cpan::Logger::Ptr g_logger = cpan::LoggerManager::getInstance()->getLogger("root");
 
@@ -24,11 +25,12 @@ Channel::~Channel() {}
 
 void Channel::update()
 {
-
+	loop_->updateChannel(this);
 }
 
 void Channel::handleEvent()
 {
+	CPAN_LOG_DEBUG(g_logger) << "Channel::handleEvent()";
 	if (revents_ & POLLNVAL)
 	{
 		CPAN_LOG_WARN(g_logger) << "Channel::handleEvent() POLLNVAL";
